@@ -4,44 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" media="screen" href="./css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css"/>
     <title>Home</title>
 </head>
 <body class="container">
-    <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-          <div class="col-md-3 mb-2 mb-md-0">
-            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-              <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-            </a>
-          </div>
-    
-          <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="index.html" class="nav-link px-2 ">Home</a></li>
-            <li><a href="#" class="nav-link px-2">Products</a></li>
-            <li><a href="#" class="nav-link px-2">About</a></li>
-          </ul>
-    
-          <div class="col-4 text-end">
-            <a href="checkout.html" class="shopping-cart">
-                    <button type="button" class="btn btn-success me-3">
-                    Checkout
-                    <img src="./svg/cart4.svg" alt="cart" height="25">
-                </button>
-            </a>
-            <button type="button" class="btn btn-outline-primary me-2">Login</button>
-            <button type="button" class="btn btn-primary">Sign-up</button>
-          </div>
-        </header>
+  <div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <div class="col-md-3 mb-2 mb-md-0">
+        <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+          <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+        </a>
       </div>
-      
 
-      <div class="row d-flex justify-content-around" id="cards"></div>
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="index.html" class="nav-link px-2 link-primary">Home</a></li>
+        <li><a href="about-us.html" class="nav-link px-2">About</a></li>
+        <li><a href="about-us.html" class="nav-link px-2">Contact</a></li>
+      </ul>
+
+      <div class="col-md-auto text-end">
+        <a href="checkout.html" class="shopping-cart">
+            <button type="button" class="btn btn-success me-3">
+            <img src="./svg/cart4.svg" alt="cart" height="25">
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill" id="cartSize"></span>
+        </button>
+    </a>
+
+        <button type="button" class="btn btn-outline-primary me-2">Login</button>
+        <button type="button" class="btn btn-primary">Sign-up</button>
+      </div>
+    </header>
+  </div>
+      
+  <div class="row d-flex justify-content-around" id="clothes"></div>
+
 
       <div class="container">
-        <footer class="py-3 my-4">
+        <footer class="py-3 my-4">  
           <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+            <li class="nav-item"><a href="index.html" class="nav-link px-2 text-body-secondary">Home</a></li>
+            <li class="nav-item"><a href="about-us.html" class="nav-link px-2 text-body-secondary">About</a></li>
+            <li class="nav-item"><a href="about-us.html" class="nav-link px-2 text-body-secondary">Contact</a></li>
           </ul>
           <p class="text-center text-body-secondary">© 2024 Company, Inc</p>
         </footer>
