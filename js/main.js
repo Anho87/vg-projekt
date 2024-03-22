@@ -18,11 +18,16 @@ function fetchAndCreateCards(category) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("hej mats 5");
-  if (window.location.pathname === '/vg-projekt/index.html') {
+  try {
+    console.log("hej mats 5");
+    const path = window.location.pathname;
+    if (path === '/vg-projekt/index.html' || path === '/index.html') {
       fetchAndCreateCards('men\'s clothing');
       fetchAndCreateCards('women\'s clothing');
       console.log("hej mats 4");
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
   }
 });
 
