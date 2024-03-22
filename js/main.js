@@ -22,19 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-  // try {
-  //     fetchAndCreateCards('men\'s clothing');
-  // } catch (error) {
-  //   console.error('An error occurred:', error);
-  // }
-
-  // try {
-  //     fetchAndCreateCards('women\'s clothing');
-  // } catch (error) {
-  //   console.error('An error occurred:', error);
-  // }
-
-
 function createCard(product) {
   const id = product.id;
   const title = product.title;
@@ -100,43 +87,128 @@ function createCard(product) {
     
   }
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
+let groupedItems = groupItemsByTitle(orderedItems);
 
 function displayOrderedItems() {
-  const orderedItems = JSON.parse(localStorage.getItem('cartArray')) || [];
+
   const orderedItemList = document.getElementById('orderedItemList');
-  orderedItemList.innerHTML = '';
+    if (orderedItemList) {
+        orderedItemList.innerHTML = '';
+    }
 
-  orderedItems.forEach(item => {
-      const listItem = document.createElement('li');
-      listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-condensed');
+  groupedItems.forEach(group => {
+    const listItem = document.createElement('li');
+    listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-condensed');
 
-     
-      listItem.innerHTML = `
-          <div class="mx-0 px-0">
-              <img src="${item.image}" alt="${item.title}" height="50">
-          </div>
-          <div>
-              <h6 class="my-0">${item.title}</h6>
-              <small class="text-muted">${item.description}</small>
-          </div>
-          <span class="text-muted">${item.price}</span>
+    const quantitySpan = document.createElement('span');
+    quantitySpan.textContent = `Qty: ${group.quantity}`;
+
+    listItem.innerHTML = `
+      <div class="mx-0 px-0">
+          <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
+      </div>
+      <div>
+          <h6 class="my-0">${group.items[0].title}</h6>
+          <small class="text-muted">${group.items[0].description.slice(0,150)+ "..."}</small>
+      </div>
+      <span class="text-muted">${group.items[0].price * group.quantity}</span>
       `;
 
-      
-      orderedItemList.appendChild(listItem);
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.classList.add('d-flex', 'flex-column');
+
+    const plusButton = document.createElement('button');
+    plusButton.textContent = '+';
+    plusButton.classList.add('btn', 'btn-success');
+    plusButton.addEventListener('click', () => increaseQuantity(group));
+
+    const minusButton = document.createElement('button');
+    minusButton.textContent = '-';
+    minusButton.classList.add('btn', 'btn-danger');
+    minusButton.addEventListener('click', () => decreaseQuantity(group));
+
+    buttonsDiv.appendChild(plusButton);
+    buttonsDiv.appendChild(minusButton);
+
+    listItem.appendChild(quantitySpan);
+    listItem.appendChild(buttonsDiv);
+
+    orderedItemList.appendChild(listItem);
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (window.location.pathname.includes("checkout.html")) {
-      displayOrderedItems();
+function groupItemsByTitle(items) {
+  const groupedItems = [];
+  items.forEach(item => {
+    const existingGroup = groupedItems.find(group => group.items[0].title === item.title);
+    if (existingGroup) {
+      existingGroup.quantity++; 
+    } else {
+      groupedItems.push({ items: [item], quantity: 1 }); 
+    }
+  });
+  console.log('Grouped Items:', groupedItems);
+  return groupedItems;
+}
+
+function increaseQuantity(group) {
+  group.quantity++;
+  updateLocalStorage(group.items[0].title, 'add');
+  displayOrderedItems(); 
+}
+
+function decreaseQuantity(group) {
+    group.quantity--;
+    if (group.quantity === 0) {
+      const indexToRemove = groupedItems.findIndex(g => g.items[0].title === group.items[0].title);
+      if (indexToRemove !== -1) {
+        groupedItems.splice(indexToRemove, 1);
+      }
+    }
+    updateLocalStorage(group.items[0].title,'remove');
+    displayOrderedItems();
+}
+
+function updateLocalStorage(title, change) {
+  let cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
+  const indexToChange = cartItems.findIndex(item => item.title === title);
+  if(change == 'remove'){
+    if (indexToChange !== -1) {
+      cartItems.splice(indexToChange, 1);
+      window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
+    } else {
+      console.log("Item with the specified title not found in the cart.");
+    }
+  }else if(change == 'add'){
+    const existingItem = cartItems.find(item => item.title === title);
+        if (existingItem) {
+      cartItems.push(existingItem);
+      window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
+    } else {
+      console.log("Item with the specified title not found.");
+    }
   }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  displayOrderedItems();
 });
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 function updateCartSize(){
   const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
   const cartSizeDiv = document.getElementById('cartSize');
-
   cartSizeDiv.innerHTML = cartItems.length;
 }
 
@@ -156,3 +228,16 @@ function emptyCart(){
   window.localStorage.removeItem("cartArray");
   location.reload();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes("checkout.html")) {
+      const totalPriceDiv = document.getElementById('totalPrice');
+      let totalPriceOfItems = 0;
+      if (orderedItems) {
+          orderedItems.forEach(item => {
+              totalPriceOfItems += item.price;
+          });
+          totalPriceDiv.innerHTML = totalPriceOfItems.toFixed(2); 
+      } 
+  }
+});
