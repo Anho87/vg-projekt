@@ -18,6 +18,7 @@ function fetchAndCreateCards(category) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("hej mats 5");
   if (window.location.pathname === '/index.html') {
       fetchAndCreateCards('men\'s clothing');
       fetchAndCreateCards('women\'s clothing');
