@@ -84,6 +84,7 @@ function createCard(product, appendTo) {
 
   const card = document.querySelector(appendTo);
   card.appendChild(cardDiv);
+  console.log("hej mats 2");
 }
 
 function displayOrderedItems() {
