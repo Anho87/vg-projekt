@@ -1,4 +1,5 @@
- function fetchAndCreateCards(category) {
+console.log("hej mats")
+function fetchAndCreateCards(category) {
     fetch(`https://fakestoreapi.com/products/category/${category}`)
         .then((res) => res.json())
         .then((json) => {
