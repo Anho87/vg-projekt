@@ -91,9 +91,13 @@ function createCard(product) {
   cardDiv.appendChild(img);
   cardDiv.appendChild(cardBodyDiv);
 
-
-  const card = document.querySelector("#clothes");
-  card.appendChild(cardDiv);
+  try {
+    const card = document.querySelector("#clothes");
+    card.appendChild(cardDiv);
+  } catch (error) {
+    
+  }
+  
   console.log("hej mats 2");
 }
 
@@ -124,7 +128,7 @@ function displayOrderedItems() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (window.location.pathname === '/checkout.html') {
+  if (window.location.pathname.includes("checkout.html")) {
       displayOrderedItems();
   }
 });
