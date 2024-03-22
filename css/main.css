@@ -7,3 +7,48 @@
     font-weight: bold;
 }
 
+.pageHeader{
+    text-decoration: none;
+}
+
+.item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+}
+
+.image-container {
+    margin-right: 10px;
+}
+
+.item-title {
+    margin: 0;
+}
+
+.item-description {
+    margin: 0;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.price {
+    font-weight: bold;
+    color: #0015ff; /* Adjust color as needed */
+}
+
+.quantity {
+    font-style: italic;
+    color: #000000; /* Adjust color as needed */
+    white-space: nowrap;
+}
+

@@ -97,11 +97,10 @@ const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
 let groupedItems = groupItemsByTitle(orderedItems);
 
 function displayOrderedItems() {
-
   const orderedItemList = document.getElementById('orderedItemList');
-    if (orderedItemList) {
-        orderedItemList.innerHTML = '';
-    }
+  if (orderedItemList) {
+    orderedItemList.innerHTML = '';
+  }
 
   groupedItems.forEach(group => {
     const listItem = document.createElement('li');
@@ -111,15 +110,23 @@ function displayOrderedItems() {
     quantitySpan.textContent = `Qty: ${group.quantity}`;
 
     listItem.innerHTML = `
-      <div class="mx-0 px-0">
-          <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
+    <div class="item-container">
+    <div class="item-details">
+      <div class="image-container">
+        <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
       </div>
-      <div>
-          <h6 class="my-0">${group.items[0].title}</h6>
-          <small class="text-muted">${group.items[0].description.slice(0,150)+ "..."}</small>
+      <div class="description-container">
+        <h6 class="item-title">${group.items[0].title}</h6>
+        <p class="item-description">${group.items[0].description}</p>
       </div>
-      <span class="text-muted">${group.items[0].price * group.quantity}</span>
-      `;
+    </div>
+    <div class="item-info">
+    <span class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</span>
+      <span class="quantity">Qty: ${group.quantity}</span>
+    </div>
+  </div>
+  
+    `;
 
     const buttonsDiv = document.createElement('div');
     buttonsDiv.classList.add('d-flex', 'flex-column');
@@ -137,12 +144,18 @@ function displayOrderedItems() {
     buttonsDiv.appendChild(plusButton);
     buttonsDiv.appendChild(minusButton);
 
-    listItem.appendChild(quantitySpan);
     listItem.appendChild(buttonsDiv);
 
-    orderedItemList.appendChild(listItem);
+    updateTotalPrice();
+
+    if (orderedItemList) {  
+      orderedItemList.appendChild(listItem);
+    }
   });
+  console.log(window.localStorage.getItem("cartArray"));
 }
+
+
 
 function groupItemsByTitle(items) {
   const groupedItems = [];
@@ -174,6 +187,17 @@ function decreaseQuantity(group) {
     }
     updateLocalStorage(group.items[0].title,'remove');
     displayOrderedItems();
+}
+
+function updateTotalPrice() {
+  const totalPriceDiv = document.getElementById('totalPrice');
+  let totalPriceOfItems = 0;
+  if (orderedItems) {
+      orderedItems.forEach(item => {
+          totalPriceOfItems += item.price;
+      });
+      totalPriceDiv.innerHTML = "$" + totalPriceOfItems.toFixed(2); 
+  } 
 }
 
 function updateLocalStorage(title, change) {
@@ -229,15 +253,15 @@ function emptyCart(){
   location.reload();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (window.location.pathname.includes("checkout.html")) {
-      const totalPriceDiv = document.getElementById('totalPrice');
-      let totalPriceOfItems = 0;
-      if (orderedItems) {
-          orderedItems.forEach(item => {
-              totalPriceOfItems += item.price;
-          });
-          totalPriceDiv.innerHTML = totalPriceOfItems.toFixed(2); 
-      } 
-  }
-});
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   if (window.location.pathname.includes("checkout.html")) {
+  //       const totalPriceDiv = document.getElementById('totalPrice');
+  //       let totalPriceOfItems = 0;
+  //       if (orderedItems) {
+  //           orderedItems.forEach(item => {
+  //               totalPriceOfItems += item.price;
+  //           });
+  //           totalPriceDiv.innerHTML = "$" + totalPriceOfItems.toFixed(2); 
+  //       } 
+  //   }
+  // });
