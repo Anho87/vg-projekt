@@ -1,11 +1,9 @@
-console.log("hej mats")
 function fetchAndCreateCards(category) {
     fetch(`https://fakestoreapi.com/products/category/${category}`)
         .then((res) => res.json())
         .then((json) => {
             json.forEach((item) => {
                 try {
-                  console.log("hej mats 3");
                     createCard(item);
                 } catch (error) {
                     console.error('Error creating card:', error);
@@ -17,20 +15,24 @@ function fetchAndCreateCards(category) {
         });
 }
 
-
-  try {
-    console.log("loading men");
-      fetchAndCreateCards('men\'s clothing');
-  } catch (error) {
-    console.error('An error occurred:', error);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes("index.html")) {
+    fetchAndCreateCards('women\'s clothing');
+    fetchAndCreateCards('men\'s clothing');
   }
+});
 
-  try {
-    console.log("loading women");
-      fetchAndCreateCards('women\'s clothing');
-  } catch (error) {
-    console.error('An error occurred:', error);
-  }
+  // try {
+  //     fetchAndCreateCards('men\'s clothing');
+  // } catch (error) {
+  //   console.error('An error occurred:', error);
+  // }
+
+  // try {
+  //     fetchAndCreateCards('women\'s clothing');
+  // } catch (error) {
+  //   console.error('An error occurred:', error);
+  // }
 
 
 function createCard(product) {
@@ -97,8 +99,6 @@ function createCard(product) {
   } catch (error) {
     
   }
-  
-  console.log("hej mats 2");
 }
 
 function displayOrderedItems() {
