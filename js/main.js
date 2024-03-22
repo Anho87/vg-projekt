@@ -19,7 +19,7 @@ function fetchAndCreateCards(category) {
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log("hej mats 5");
-  if (window.location.pathname === '/index.html') {
+  if (window.location.pathname === '/vg-projekt/index.html') {
       fetchAndCreateCards('men\'s clothing');
       fetchAndCreateCards('women\'s clothing');
       console.log("hej mats 4");
