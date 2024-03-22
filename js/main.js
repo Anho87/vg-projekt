@@ -5,7 +5,8 @@ function fetchAndCreateCards(category) {
         .then((json) => {
             json.forEach((item) => {
                 try {
-                    createCard(item, "#clothes");
+                  console.log("hej mats 3");
+                    createCard(item);
                 } catch (error) {
                     console.error('Error creating card:', error);
                 }
@@ -17,13 +18,14 @@ function fetchAndCreateCards(category) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (window.location.pathname === '/index.html' || window.location.pathname === '/') {
+  if (window.location.pathname === '/index.html') {
       fetchAndCreateCards('men\'s clothing');
       fetchAndCreateCards('women\'s clothing');
+      console.log("hej mats 4");
   }
 });
 
-function createCard(product, appendTo) {
+function createCard(product) {
   const id = product.id;
   const title = product.title;
   const price = product.price;
@@ -82,7 +84,7 @@ function createCard(product, appendTo) {
   cardDiv.appendChild(cardBodyDiv);
 
 
-  const card = document.querySelector(appendTo);
+  const card = document.querySelector("#clothes");
   card.appendChild(cardDiv);
   console.log("hej mats 2");
 }
