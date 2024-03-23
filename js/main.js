@@ -85,7 +85,10 @@ function createCard(product) {
     card.appendChild(cardDiv);
   } catch (error) {}
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+///////////////// Checkout ////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
 let groupedItems = groupItemsByTitle(orderedItems);
@@ -112,19 +115,15 @@ function displayOrderedItems() {
     <div class="item-container">
     <div class="item-details">
       <div class="image-container">
-        <img src="${group.items[0].image}" alt="${
-      group.items[0].title
-    }" height="50">
+        <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
       </div>
       <div class="description-container">
-        <h6 class="item-title">${group.items[0].title}</h6>
-        <p class="item-description">${group.items[0].description}</p>
+        <h6 class="item-title">${group.items[0].title}</h6> 
+        <p class="item-description">${group.items[0].description}</p> 
       </div>
     </div>
     <div class="item-info">
-    <span class="price">$${(group.items[0].price * group.quantity).toFixed(
-      2
-    )}</span>
+    <span class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</span>
       <span class="quantity">Qty: ${group.quantity}</span>
     </div>
   </div>
@@ -182,14 +181,12 @@ function removeEach(group) {
   group.quantity == 0;
   updateLocalStorage(group.items[0].title, "removeAll");
   displayOrderedItems();
-  updateTotalPrice();
 }
 
 function increaseQuantity(group) {
   group.quantity++;
   updateLocalStorage(group.items[0].title, "add");
   displayOrderedItems();
-  updateTotalPrice();
 }
 
 function decreaseQuantity(group) {
@@ -204,19 +201,21 @@ function decreaseQuantity(group) {
   }
   updateLocalStorage(group.items[0].title, "remove");
   displayOrderedItems();
-  updateTotalPrice();
 }
 
 function updateTotalPrice() {
-  const orderedItems =
-    JSON.parse(window.localStorage.getItem("cartArray")) || [];
-  const totalPriceDiv = document.getElementById("totalPrice");
+  const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
+  const totalPriceElements = document.querySelectorAll(".totalPrice");
   let totalPriceOfItems = 0;
+  
   if (orderedItems) {
     orderedItems.forEach((item) => {
       totalPriceOfItems += item.price;
     });
-    totalPriceDiv.innerHTML = "$" + totalPriceOfItems.toFixed(2);
+    
+    totalPriceElements.forEach((element) => {
+      element.innerHTML = "$" + totalPriceOfItems.toFixed(2);
+    });
   }
 }
 
@@ -246,7 +245,9 @@ function updateLocalStorage(title, change) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("checkout.html")) {
   displayOrderedItems();
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -261,7 +262,9 @@ function emptyCart() {
   location.reload();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////// Cart Button /////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 function updateCartSize() {
   const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
@@ -274,9 +277,12 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updateCartSize, 100);
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////// Checkout person info ////////////////////////
+///////////////////////////////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.pathname.includes("checkout.html")) {
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.addEventListener("click", function (event) {
     event.preventDefault();
@@ -289,6 +295,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputAddress = document.getElementById("inputAddress").value.trim();
     const inputCity = document.getElementById("inputCity").value.trim();
     const inputZip = document.getElementById("inputZip").value.trim();
+
+    const formData = {
+      name: inputName,
+      email: inputEmail,
+      phone: inputPhone,
+      address: inputAddress,
+      city: inputCity,
+      zip: inputZip
+    };
+    const formDataString = JSON.stringify(formData);
+    localStorage.setItem("formData", formDataString);
+
     let isValid = true;
 
     const onlyLettersRegex = /^[A-Za-z\s]{2,50}$/;
@@ -330,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = "purchaseConfirmationPage.html";
     }
   });
-});
+}});
 
 function displayAlert(message, inputField) {
   const alertDiv = document.createElement("div");
@@ -344,4 +362,92 @@ function displayAlert(message, inputField) {
 function removeAlerts() {
   const alerts = document.querySelectorAll(".alert-danger");
   alerts.forEach((alert) => alert.remove());
+}
+
+
+
+///////////////////////////////////////////////////////////////
+///////////////// Purchase confirmation ///////////////////////
+///////////////////////////////////////////////////////////////
+
+
+function displayBoughtItems() {
+  const boughtItemList = document.getElementById("boughtItemList");
+  if (boughtItemList) {
+    boughtItemList.innerHTML = ""; 
+  }
+
+  const table = document.createElement("table");
+  table.classList.add("table", "table-striped");
+
+  const tableHeader = document.createElement("thead");
+  tableHeader.innerHTML = `
+    <tr>
+      <th>Image</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </tr>
+  `;
+  table.appendChild(tableHeader);
+
+  const tableBody = document.createElement("tbody");
+
+  groupedItems.forEach((group) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td><img src="${group.items[0].image}" alt="${group.items[0].title}" height="50"></td>
+      <td id="tableTitle">${group.items[0].title}</td>
+      <td id="tableDescription">${group.items[0].description}</td>
+      <td>$${(group.items[0].price * group.quantity).toFixed(2)}</td>
+      <td>${group.quantity}</td>
+    `;
+
+    tableBody.appendChild(row);
+  });
+
+  table.appendChild(tableBody);
+
+  if (boughtItemList) {
+    boughtItemList.appendChild(table);
+  }
+
+  updateTotalPrice();
+
+  // window.localStorage.removeItem("cartArray");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("purchaseConfirmationPage.html")) {
+  displayBoughtItems();
+  addUserInfo();
+  }
+});
+
+function addUserInfo() {
+  const formDataString = localStorage.getItem("formData");
+  
+  if (formDataString) {
+  const formData = JSON.parse(formDataString);
+
+  const userName = formData.name;
+  const userEmail = formData.email;
+  const userPhone = formData.phone;
+  const userAddress = formData.address;
+  const userCity = formData.city;
+  const userZipCode = formData.zip;
+
+  document.getElementById("userName").textContent = userName || '';
+  document.getElementById("userEmail").textContent = userEmail || '';
+  document.getElementById("userPhone").textContent = userPhone || '';
+  document.getElementById("userAddress").textContent = userAddress || '';
+  document.getElementById("userCity").textContent = userCity || '';
+  document.getElementById("userZipCode").textContent = userZipCode || '';
+  
+  // window.localStorage.removeItem("formData");
+} else {
+  console.log("No form data found in localStorage.");
+}
 }

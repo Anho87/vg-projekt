@@ -62,3 +62,12 @@
   width: 100%;
   font-size: 20px;
 }
+
+#tableTitle{
+  font-weight: bold;
+}
+
+#tableDescription{
+  font-size: 0.8rem;
+}
+
