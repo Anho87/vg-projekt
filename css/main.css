@@ -1,5 +1,4 @@
 .card {
-  /* background-color: #0f2537; */
   border: none;
 }
 
@@ -36,9 +35,9 @@
   margin: 0;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* Limit to two rows */
+  -webkit-line-clamp: 2; 
   overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+  text-overflow: ellipsis;
   max-height: 3em;
 }
 
@@ -49,12 +48,12 @@
 
 .price {
   font-weight: bold;
-  color: #0015ff; /* Adjust color as needed */
+  color: #0015ff; 
 }
 
 .quantity {
   font-style: italic;
-  color: #000000; /* Adjust color as needed */
+  color: #000000; 
   white-space: nowrap;
 }
 
@@ -69,5 +68,34 @@
 
 #tableDescription{
   font-size: 0.8rem;
+}
+
+@media screen and (max-width: 768px){
+  .item-description {
+    display: none;
+  }
+  #priceHeader,
+  #amountHeader,
+  #tableDescription {
+    display: none;
+  }
+
+  .item-title {
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media screen and (min-width: 1400px) {
+  .description-container {
+    width: 970px; 
+  }
+}
+
+@media screen and (max-width: 468px){
+  .item-title{
+    display: none;
+  }
 }
 

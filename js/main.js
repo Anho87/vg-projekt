@@ -38,7 +38,7 @@ function createCard(product) {
   img.classList.add("card-img-top");
   img.src = image;
   img.alt = `image describing ${title}`;
-  img.style.height = "300px";
+  // img.style.height = "300px";
 
   const cardBodyDiv = document.createElement("div");
   cardBodyDiv.classList.add("card-body");
@@ -81,13 +81,30 @@ function createCard(product) {
   cardDiv.appendChild(cardBodyDiv);
 
   try {
-    const card = document.querySelector("#clothes");
+    const card = document.querySelector('#products');
     card.appendChild(cardDiv);
   } catch (error) {}
 }
 
 ///////////////////////////////////////////////////////////////
-///////////////// Checkout ////////////////////////////////////
+///////////////// Cart Button /////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+function updateCartSize() {
+  const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
+  const cartSizeDiv = document.getElementById("cartSize");
+  if (cartSizeDiv) {
+      cartSizeDiv.innerHTML = cartItems.length;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartSize();
+  setInterval(updateCartSize, 100);
+});
+
+///////////////////////////////////////////////////////////////
+///////////////// Checkout Items //////////////////////////////
 ///////////////////////////////////////////////////////////////
 
 const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
@@ -113,34 +130,33 @@ function displayOrderedItems() {
 
     listItem.innerHTML = `
     <div class="item-container">
-    <div class="item-details">
-      <div class="image-container">
-        <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
+      <div class="item-details">
+        <div class="image-container">
+          <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
+        </div>
+        <div class="description-container">
+          <h6 class="item-title">${group.items[0].title}</h6> 
+          <p class="item-description">${group.items[0].description}</p> 
+        </div>
       </div>
-      <div class="description-container">
-        <h6 class="item-title">${group.items[0].title}</h6> 
-        <p class="item-description">${group.items[0].description}</p> 
+      <div class="item-info">
+        <span class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</span>
+        <span class="quantity">Qty: ${group.quantity}</span>
       </div>
     </div>
-    <div class="item-info">
-    <span class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</span>
-      <span class="quantity">Qty: ${group.quantity}</span>
-    </div>
-  </div>
-  
     `;
 
     const buttonsDiv = document.createElement("div");
-    buttonsDiv.classList.add("row", "d-flex", "flex-column", "align-items-end");
+    buttonsDiv.classList.add("buttons-container", "d-flex", "align-items-center");
 
     const plusButton = document.createElement("button");
     plusButton.textContent = "+";
-    plusButton.classList.add("btn", "btn-success");
+    plusButton.classList.add("btn", "btn-success", "mr-2");
     plusButton.addEventListener("click", () => increaseQuantity(group));
 
     const minusButton = document.createElement("button");
     minusButton.textContent = "-";
-    minusButton.classList.add("btn", "btn-warning");
+    minusButton.classList.add("btn", "btn-warning", "mr-2");
     minusButton.addEventListener("click", () => decreaseQuantity(group));
 
     const removeEachButton = document.createElement("button");
@@ -161,6 +177,8 @@ function displayOrderedItems() {
     }
   });
 }
+
+
 
 function groupItemsByTitle(items) {
   const groupedItems = [];
@@ -263,21 +281,6 @@ function emptyCart() {
 }
 
 ///////////////////////////////////////////////////////////////
-///////////////// Cart Button /////////////////////////////////
-///////////////////////////////////////////////////////////////
-
-function updateCartSize() {
-  const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
-  const cartSizeDiv = document.getElementById("cartSize");
-  cartSizeDiv.innerHTML = cartItems.length;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  updateCartSize();
-  setInterval(updateCartSize, 100);
-});
-
-///////////////////////////////////////////////////////////////
 ///////////////// Checkout person info ////////////////////////
 ///////////////////////////////////////////////////////////////
 
@@ -374,8 +377,11 @@ function removeAlerts() {
 function displayBoughtItems() {
   const boughtItemList = document.getElementById("boughtItemList");
   if (boughtItemList) {
-    boughtItemList.innerHTML = ""; 
+    boughtItemList.innerHTML = "";
   }
+
+  const tableWrapper = document.createElement("div");
+  tableWrapper.classList.add("table-responsive"); 
 
   const table = document.createElement("table");
   table.classList.add("table", "table-striped");
@@ -383,11 +389,11 @@ function displayBoughtItems() {
   const tableHeader = document.createElement("thead");
   tableHeader.innerHTML = `
     <tr>
-      <th>Image</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Quantity</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th id="priceHeader">Price</th>
+      <th id="amountHeader">Amount</th>
     </tr>
   `;
   table.appendChild(tableHeader);
@@ -401,7 +407,7 @@ function displayBoughtItems() {
       <td><img src="${group.items[0].image}" alt="${group.items[0].title}" height="50"></td>
       <td id="tableTitle">${group.items[0].title}</td>
       <td id="tableDescription">${group.items[0].description}</td>
-      <td>$${(group.items[0].price * group.quantity).toFixed(2)}</td>
+      <td class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</td>
       <td>${group.quantity}</td>
     `;
 
@@ -410,13 +416,13 @@ function displayBoughtItems() {
 
   table.appendChild(tableBody);
 
+  tableWrapper.appendChild(table);
+
   if (boughtItemList) {
-    boughtItemList.appendChild(table);
+    boughtItemList.appendChild(tableWrapper); 
   }
 
   updateTotalPrice();
-
-  // window.localStorage.removeItem("cartArray");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -446,7 +452,10 @@ function addUserInfo() {
   document.getElementById("userCity").textContent = userCity || '';
   document.getElementById("userZipCode").textContent = userZipCode || '';
   
-  // window.localStorage.removeItem("formData");
+ 
+
+  // window.localStorage.clear();
+  
 } else {
   console.log("No form data found in localStorage.");
 }
