@@ -1,3 +1,7 @@
+///////////////////////////////////////////////////////////////
+///////////////// Fetch Data /////////////////////////////////
+///////////////////////////////////////////////////////////////
+
 function fetchAndCreateCards(category) {
   fetch(`https://fakestoreapi.com/products/category/${category}`)
     .then((res) => res.json())
@@ -457,7 +461,7 @@ function addUserInfo() {
   
  
 
-  // window.localStorage.clear();
+  window.localStorage.clear();
   
 } else {
   console.log("No form data found in localStorage.");
