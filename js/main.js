@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function createCard(product) {
   try {
-    const { id, title, price, description, image } = product;
+    const { id, title, price, image } = product;
 
     // Create card container
     const cardDiv = document.createElement("div");
@@ -59,7 +59,7 @@ function createCard(product) {
 
     // Create card price
     const cardPrice = document.createElement("p");
-    cardPrice.classList.add("card-text", "text-warning");
+    cardPrice.classList.add("card-text", "price");
     cardPrice.textContent = `Price: ${price}$`;
 
     // Create add to cart button
@@ -87,7 +87,8 @@ function createCard(product) {
   } catch (error) {
     console.error("Error creating card:", error);
   }
-}
+} 
+
 
 
 ///////////////////////////////////////////////////////////////
@@ -483,17 +484,72 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("productTitle").textContent = title;
     document.getElementById("productPrice").textContent = `Price: ${price}$`;
     document.getElementById("productDescription").textContent = description;
+    document.getElementById("rateCount").textContent = `${rate}/5 - ${count} votes`;
 
-    // Add event listener to "Add to Cart" button
     document.getElementById("addToCartButton").addEventListener("click", () => {
       const quantity = document.getElementById("inputQuantity").value;
-      const cartItem = { product, quantity };
       const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
-      cartItems.push(product);
-      window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
+      if (quantity > 0) {
+        for (let index = 0; index < quantity; index++) {
+          cartItems.push(product);
+          window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
+          } 
+      }
     });
 
   }
 });
 
+///////////////////////////////////////////////////////////////
+///////////////// Login Page //////////////////////////////////
+///////////////////////////////////////////////////////////////
 
+function redirectToLogin() {
+  window.location.href = "login.html";
+}
+
+
+///////////////////////////////////////////////////////////////
+///////////////// Contact Us /////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("contact-us.html")) {
+    const submitBtn = document.getElementById("contactSubmitBtn");
+    submitBtn.addEventListener("click", function(event) {
+      event.preventDefault(); 
+      emptyTextFields();
+      const displayAlert = `
+        <div class="alert alert-success" role="alert">
+            Thank you! We will get back to you as soon as possible!
+        </div>
+      `;
+      document.getElementById('displaySuccesAlert').innerHTML = displayAlert;
+    });
+  }
+});
+
+
+function emptyTextFields() {
+  var formControls = document.getElementsByClassName('form-control');
+  for (var i = 0; i < formControls.length; i++) {
+      formControls[i].value = '';
+  }
+}
+
+///////////////////////////////////////////////////////////////
+///////////////// Header Footer ///////////////////////////////
+///////////////////////////////////////////////////////////////
+
+fetch('footer.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('footer-placeholder').innerHTML = html;
+      });
+
+
+fetch('header.html')
+  .then(response => response.text())
+  .then(html => {
+    document.getElementById('header-placeholder').innerHTML = html;
+});

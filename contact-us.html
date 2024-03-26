@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="screen" href="./css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="./css/main.css">
+  <title>Contact Us</title>
+</head>
+
+<body class="container">
+
+  <div id="header-placeholder"></div>
+
+
+
+<h1>Contact Form</h1>
+<form id="contact_form" name="contact_form" method="post">
+    <div class="mb-5 row">
+        <div class="col">
+            <label>First Name</label>
+            <input type="text"  class="form-control" id="first_name" name="first_name">
+        </div>
+        <div class="col">
+            <label>Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name">
+        </div>
+    </div>
+    <div class="mb-5 row">
+        <div class="col">
+            <label for="email_addr">Email address</label>
+            <input type="email" class="form-control" id="email_addr" name="email"
+                placeholder="name@example.com">
+        </div>
+        <div class="col">
+            <label for="phone_input">Phone</label>
+            <input type="tel" class="form-control" id="phone_input" name="Phone"
+                placeholder="Phone">
+        </div>
+    </div>
+    <div class="mb-5">
+        <label for="message">Message</label>
+        <textarea class="form-control" id="message" name="message" rows="5"></textarea>
+        <div id="displaySuccesAlert"></div>
+    </div>
+    <button type="submit" id="contactSubmitBtn" class="btn btn-success px-4 btn-lg">Post</button>
+</form>
+
+
+
+
+  <div id="footer-placeholder"></div>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
