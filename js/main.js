@@ -23,68 +23,72 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createCard(product) {
-  const id = product.id;
-  const title = product.title;
-  const price = product.price;
-  const description = product.description;
-  const image = product.image;
-
-  const cardDiv = document.createElement("div");
-  cardDiv.classList.add("card");
-  cardDiv.classList.add("my-2");
-  cardDiv.style.width = "18rem";
-
-  const img = document.createElement("img");
-  img.classList.add("card-img-top");
-  img.src = image;
-  img.alt = `image describing ${title}`;
-  // img.style.height = "300px";
-
-  const cardBodyDiv = document.createElement("div");
-  cardBodyDiv.classList.add("card-body");
-  cardBodyDiv.classList.add("d-flex");
-  cardBodyDiv.classList.add("flex-column");
-
-  const cardTitle = document.createElement("h5");
-  cardTitle.classList.add("card-title");
-  cardTitle.textContent = title.slice(0, 50);
-
-  const cardText = document.createElement("p");
-  cardText.classList.add("card-text");
-  cardText.textContent = description.slice(0, 100) + "...";
-
-  const cardPrice = document.createElement("p");
-  cardPrice.classList.add("card-text");
-  cardPrice.classList.add("text-warning");
-  cardPrice.textContent = `Price: ${price}$`;
-
-  const btn = document.createElement("a");
-  btn.classList.add("btn", "btn-success", "mt-auto");
-  btn.id = "addToCartId" + id;
-  btn.href = "#";
-  btn.textContent = "Add to cart";
-
-  btn.addEventListener("click", () => {
-    const cartItems =
-      JSON.parse(window.localStorage.getItem("cartArray")) || [];
-    cartItems.push(product);
-    window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
-    event.preventDefault();
-  });
-
-  cardBodyDiv.appendChild(cardTitle);
-  cardBodyDiv.appendChild(cardText);
-  cardBodyDiv.appendChild(cardPrice);
-  cardBodyDiv.appendChild(btn);
-
-  cardDiv.appendChild(img);
-  cardDiv.appendChild(cardBodyDiv);
-
   try {
-    const card = document.querySelector('#products');
-    card.appendChild(cardDiv);
-  } catch (error) {}
+    const { id, title, price, description, image } = product;
+
+    // Create card container
+    const cardDiv = document.createElement("div");
+    cardDiv.classList.add("card", "my-2");
+    cardDiv.style.width = "18rem";
+
+    // Create anchor tag for the image link
+    const imgLink = document.createElement("a");
+    imgLink.href = "product.html";
+    imgLink.addEventListener("click", () => {
+      window.localStorage.setItem("product", JSON.stringify(product));
+    });
+
+    // Create card image
+    const img = document.createElement("img");
+    img.classList.add("card-img-top");
+    img.src = image;
+    img.alt = `image describing ${title}`;
+    img.style.height = "300px";
+
+    // Append image to anchor tag
+    imgLink.appendChild(img);
+
+    // Create card body
+    const cardBodyDiv = document.createElement("div");
+    cardBodyDiv.classList.add("card-body", "d-flex", "flex-column");
+
+    // Create card title
+    const cardTitle = document.createElement("h5");
+    cardTitle.classList.add("card-title");
+    cardTitle.textContent = title.slice(0, 50);
+
+    // Create card price
+    const cardPrice = document.createElement("p");
+    cardPrice.classList.add("card-text", "text-warning");
+    cardPrice.textContent = `Price: ${price}$`;
+
+    // Create add to cart button
+    const btn = document.createElement("button");
+    btn.classList.add("btn", "btn-success", "mt-auto");
+    btn.id = "addToCartId" + id;
+    btn.textContent = "Add to cart";
+    btn.addEventListener("click", () => {
+      const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
+      cartItems.push(product);
+      window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
+      event.preventDefault();
+    });
+
+    // Append elements
+    cardBodyDiv.appendChild(cardTitle);
+    cardBodyDiv.appendChild(cardPrice);
+    cardBodyDiv.appendChild(btn);
+    cardDiv.appendChild(imgLink);
+    cardDiv.appendChild(cardBodyDiv);
+
+    // Append card to container
+    const productsContainer = document.querySelector('#products');
+    productsContainer.appendChild(cardDiv);
+  } catch (error) {
+    console.error("Error creating card:", error);
+  }
 }
+
 
 ///////////////////////////////////////////////////////////////
 ///////////////// Cart Button /////////////////////////////////
@@ -177,8 +181,6 @@ function displayOrderedItems() {
     }
   });
 }
-
-
 
 function groupItemsByTitle(items) {
   const groupedItems = [];
@@ -460,3 +462,38 @@ function addUserInfo() {
   console.log("No form data found in localStorage.");
 }
 }
+
+///////////////////////////////////////////////////////////////
+///////////////// Product Page ////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.includes("product.html")) {
+    console.log("hej");
+    const product = JSON.parse(window.localStorage.getItem("product")) || [];
+    console.log(product);
+    const image = product.image;
+    const title = product.title;
+    const price = product.price;
+    const description = product.description;
+    const rate = product.rating.rate;
+    const count = product.rating.count;
+
+    document.getElementById("productImage").src = image;
+    document.getElementById("productTitle").textContent = title;
+    document.getElementById("productPrice").textContent = `Price: ${price}$`;
+    document.getElementById("productDescription").textContent = description;
+
+    // Add event listener to "Add to Cart" button
+    document.getElementById("addToCartButton").addEventListener("click", () => {
+      const quantity = document.getElementById("inputQuantity").value;
+      const cartItem = { product, quantity };
+      const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
+      cartItems.push(product);
+      window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
+    });
+
+  }
+});
+
+

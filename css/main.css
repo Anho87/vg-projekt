@@ -70,6 +70,10 @@
   font-size: 0.8rem;
 }
 
+/* .card-img-container{
+  max-width: 200px; 
+} */
+
 @media screen and (max-width: 768px){
   .item-description {
     display: none;
@@ -79,14 +83,8 @@
   #tableDescription {
     display: none;
   }
-
-  .item-title {
-    width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 }
+
 @media screen and (min-width: 1400px) {
   .description-container {
     width: 970px; 
