@@ -347,35 +347,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const phoneRegex = /^[0-9\d\s()-]{1,50}$/;
     const onlyNumbersRegex = /[0-9]/;
 
-    // if (!onlyLettersRegex.test(inputName)) {
-    //     displayAlert("Name must be between 2 and 50 characters long and contain only letters.", document.getElementById('inputName'));
-    //     isValid = false;
-    // }
+    if (!onlyLettersRegex.test(inputName)) {
+        displayAlert("Name must be between 2 and 50 characters long and contain only letters.", document.getElementById('inputName'));
+        isValid = false;
+    }
 
-    // if (inputEmail.length > 50 || !containsAtRegex.test(inputEmail)) {
-    //   displayAlert('E-postadressen får inte vara längre än 50 tecken och måste innehålla @.', document.getElementById('inputEmail'));
-    //   isValid = false;
-    // }
+    if (inputEmail.length > 50 || !containsAtRegex.test(inputEmail)) {
+      displayAlert('The email address cannot be longer than 50 characters and must contain @.', document.getElementById('inputEmail'));
+      isValid = false;
+    }
 
-    // if (!phoneRegex.test(inputPhone)) {
-    //     displayAlert('Numret får endast innehålla siffror, paranteser, bindestreck och max 50 tecken långt.', document.getElementById('inputPhone'));
-    //     isValid = false;
-    //   }
+    if (!phoneRegex.test(inputPhone)) {
+        displayAlert('The number can only contain digits, parentheses, hyphens, and be up to 50 characters long.', document.getElementById('inputPhone'));
+        isValid = false;
+      }
 
-    // if (inputAddress.length < 2 || inputAddress.length > 50) {
-    //   displayAlert('Addressen får endast vara minst 2 tecken och max 50 tecken.', document.getElementById('inputAddress'));
-    //   isValid = false;
-    // }
+    if (inputAddress.length < 2 || inputAddress.length > 50) {
+      displayAlert('The address must be between 2 and 50 characters long.', document.getElementById('inputAddress'));
+      isValid = false;
+    }
 
-    // if (!onlyLettersRegex.test(inputCity)) {
-    //   displayAlert('Staden får endast innehålla 2-50 tecken.', document.getElementById('inputCity'))
-    //   isValid = false;
-    // }
+    if (!onlyLettersRegex.test(inputCity)) {
+      displayAlert('The cityname must be between 2 and 50 characters long.', document.getElementById('inputCity'))
+      isValid = false;
+    }
 
-    // if (!inputZip.length === 5 || !onlyNumbersRegex.test(inputZip)) {
-    //   displayAlert('Postkoden får endast vara 5 siffror', document.getElementById('inputZip'));
-    //   isValid = false;
-    // }
+    if (!inputZip.length === 5 || !onlyNumbersRegex.test(inputZip)) {
+      displayAlert('The postal code can only be 5 digits.', document.getElementById('inputZip'));
+      isValid = false;
+    }
 
     if (isValid) {
       window.location.href = "purchaseConfirmationPage.html";
