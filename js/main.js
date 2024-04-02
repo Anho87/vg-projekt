@@ -73,7 +73,8 @@ function createCard(product) {
     btn.textContent = "Add to cart";
     btn.addEventListener("click", () => {
       const cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
-      cartItems.push(product);
+      const productNameWithoutQuotes = product.title.replace(/'/g, '');
+      cartItems.push({ ...product, title: productNameWithoutQuotes });
       window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
       event.preventDefault();
     });
@@ -116,6 +117,26 @@ document.addEventListener("DOMContentLoaded", () => {
 ///////////////// Checkout Items //////////////////////////////
 ///////////////////////////////////////////////////////////////
 
+
+function findProductByTitle(title) {
+  var cartArray = JSON.parse(localStorage.getItem('cartArray'));
+  for (var i = 0; i < cartArray.length; i++) {
+    if (cartArray[i].title.toLowerCase().trim() === title.toLowerCase().trim()) {
+      return cartArray[i];
+    }
+  }
+  return null; 
+}
+
+function imageClickHandler(title) {
+  var product = findProductByTitle(title);
+  console.log(product);
+
+  if (product) {
+      window.localStorage.setItem("product", JSON.stringify(product));
+  }
+}
+
 const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
 let groupedItems = groupItemsByTitle(orderedItems);
 
@@ -139,21 +160,23 @@ function displayOrderedItems() {
 
     listItem.innerHTML = `
     <div class="item-container">
-      <div class="item-details">
-        <div class="image-container">
-          <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
+        <div class="item-details">
+            <div class="image-container">
+                <a href="product.html" onclick="imageClickHandler('${group.items[0].title}')">
+                    <img src="${group.items[0].image}" alt="${group.items[0].title}" height="50">
+                </a>
+            </div>
+            <div class="description-container">
+                <h6 class="item-title">${group.items[0].title}</h6> 
+                <p class="item-description">${group.items[0].description}</p> 
+            </div>
         </div>
-        <div class="description-container">
-          <h6 class="item-title">${group.items[0].title}</h6> 
-          <p class="item-description">${group.items[0].description}</p> 
+        <div class="item-info">
+            <span class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</span>
+            <span class="quantity">Qty: ${group.quantity}</span>
         </div>
-      </div>
-      <div class="item-info">
-        <span class="price">$${(group.items[0].price * group.quantity).toFixed(2)}</span>
-        <span class="quantity">Qty: ${group.quantity}</span>
-      </div>
     </div>
-    `;
+`;
 
     const buttonsDiv = document.createElement("div");
     buttonsDiv.classList.add("buttons-container", "d-flex", "align-items-center");
@@ -459,7 +482,6 @@ function addUserInfo() {
   document.getElementById("userCity").textContent = userCity || '';
   document.getElementById("userZipCode").textContent = userZipCode || '';
   
- 
 
   window.localStorage.clear();
   
@@ -474,7 +496,6 @@ function addUserInfo() {
 
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("product.html")) {
-    console.log("hej");
     const product = JSON.parse(window.localStorage.getItem("product")) || [];
     console.log(product);
     const image = product.image;
@@ -500,7 +521,6 @@ document.addEventListener("DOMContentLoaded", () => {
           } 
       }
     });
-
   }
 });
 
