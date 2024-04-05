@@ -30,43 +30,35 @@ function createCard(product) {
   try {
     const { id, title, price, image } = product;
 
-    // Create card container
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("card", "my-2");
     cardDiv.style.width = "18rem";
 
-    // Create anchor tag for the image link
     const imgLink = document.createElement("a");
     imgLink.href = "product.html";
     imgLink.addEventListener("click", () => {
       window.localStorage.setItem("product", JSON.stringify(product));
     });
 
-    // Create card image
     const img = document.createElement("img");
     img.classList.add("card-img-top");
     img.src = image;
     img.alt = `image describing ${title}`;
     img.style.height = "300px";
 
-    // Append image to anchor tag
     imgLink.appendChild(img);
 
-    // Create card body
     const cardBodyDiv = document.createElement("div");
     cardBodyDiv.classList.add("card-body", "d-flex", "flex-column");
 
-    // Create card title
     const cardTitle = document.createElement("h5");
     cardTitle.classList.add("card-title");
     cardTitle.textContent = title.slice(0, 50);
 
-    // Create card price
     const cardPrice = document.createElement("p");
     cardPrice.classList.add("card-text", "price");
     cardPrice.textContent = `Price: ${price}$`;
 
-    // Create add to cart button
     const btn = document.createElement("button");
     btn.classList.add("btn", "btn-success", "mt-auto");
     btn.id = "addToCartId" + id;
@@ -79,14 +71,12 @@ function createCard(product) {
       event.preventDefault();
     });
 
-    // Append elements
     cardBodyDiv.appendChild(cardTitle);
     cardBodyDiv.appendChild(cardPrice);
     cardBodyDiv.appendChild(btn);
     cardDiv.appendChild(imgLink);
     cardDiv.appendChild(cardBodyDiv);
 
-    // Append card to container
     const productsContainer = document.querySelector('#products');
     productsContainer.appendChild(cardDiv);
   } catch (error) {
@@ -116,26 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 ///////////////////////////////////////////////////////////////
 ///////////////// Checkout Items //////////////////////////////
 ///////////////////////////////////////////////////////////////
-
-
-function findProductByTitle(title) {
-  var cartArray = JSON.parse(localStorage.getItem('cartArray'));
-  for (var i = 0; i < cartArray.length; i++) {
-    if (cartArray[i].title.toLowerCase().trim() === title.toLowerCase().trim()) {
-      return cartArray[i];
-    }
-  }
-  return null; 
-}
-
-function imageClickHandler(title) {
-  var product = findProductByTitle(title);
-  console.log(product);
-
-  if (product) {
-      window.localStorage.setItem("product", JSON.stringify(product));
-  }
-}
 
 const orderedItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
 let groupedItems = groupItemsByTitle(orderedItems);
@@ -269,8 +239,8 @@ function updateTotalPrice() {
 
 function updateLocalStorage(title, change) {
   let cartItems = JSON.parse(window.localStorage.getItem("cartArray")) || [];
-  const indexToChange = cartItems.findIndex((item) => item.title === title);
   if (change == "remove") {
+    const indexToChange = cartItems.findIndex((item) => item.title === title);
     if (indexToChange !== -1) {
       cartItems.splice(indexToChange, 1);
       window.localStorage.setItem("cartArray", JSON.stringify(cartItems));
@@ -292,14 +262,28 @@ function updateLocalStorage(title, change) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.location.pathname.includes("checkout.html")) {
-  displayOrderedItems();
+function findProductByTitle(title) {
+  var cartArray = JSON.parse(localStorage.getItem('cartArray'));
+  for (var i = 0; i < cartArray.length; i++) {
+    if (cartArray[i].title.toLowerCase().trim() === title.toLowerCase().trim()) {
+      return cartArray[i];
+    }
   }
-});
+  return null; 
+}
+
+function imageClickHandler(title) {
+  var product = findProductByTitle(title);
+  console.log(product);
+
+  if (product) {
+      window.localStorage.setItem("product", JSON.stringify(product));
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("checkout.html")) {
+    displayOrderedItems();
     const emptyCartBtn = document.getElementById("emptyCart");
     emptyCartBtn.addEventListener("click", emptyCart);
   }
@@ -525,11 +509,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 ///////////////////////////////////////////////////////////////
-///////////////// Login Page //////////////////////////////////
+///////////////// Login Page/Sign-up Page /////////////////////
 ///////////////////////////////////////////////////////////////
 
 function redirectToLogin() {
   window.location.href = "login.html";
+}
+
+function redirectToSignUp(){
+  window.location.href = "sign-up.html";
 }
 
 
